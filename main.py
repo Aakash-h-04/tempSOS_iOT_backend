@@ -396,6 +396,15 @@ def get_best_move(
     board: str = Query(...)
 ):
 
+
+    best_move = find_best_move(
+        [
+            int(cell)
+            for cell in board
+        ]
+    )
+
+
     return PlainTextResponse(
-        "Received board: " + board
+        str(best_move)
     )
