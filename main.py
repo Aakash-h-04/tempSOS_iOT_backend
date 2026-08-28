@@ -1,5 +1,5 @@
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException, Query
 from fastapi.responses import (PlainTextResponse,FileResponse)
 
 from fastapi.staticfiles import StaticFiles
@@ -80,7 +80,7 @@ def home():
 def health():
 
     return PlainTextResponse(
-        "OK"
+        "abi tk toh changaa-siiii"
     )
 
 
@@ -386,4 +386,16 @@ async def best_move(request: Request):
 
     return str(
         best_move
+    )
+
+@app.get(
+    "/best-move",
+    response_class=PlainTextResponse
+)
+def get_best_move(
+    board: str = Query(...)
+):
+
+    return PlainTextResponse(
+        "Received board: " + board
     )
