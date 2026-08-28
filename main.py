@@ -523,14 +523,12 @@ def get_best_move(
 ):
 
 
-    best_move = find_best_move(
-        [
-            int(cell)
-            for cell in board
-        ]
+    result, status_code = solve_board(
+        board
     )
 
 
     return PlainTextResponse(
-        str(best_move)
+        result,
+        status_code=status_code
     )
