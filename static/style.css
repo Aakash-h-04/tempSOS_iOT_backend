@@ -1,0 +1,2494 @@
+/* ============================================================
+   GLOBAL
+   ============================================================ */
+
+   * {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-family: Arial, sans-serif;
+
+    background: #f4f4f4;
+
+}
+
+
+/* ============================================================
+   MAIN CONTAINER
+   ============================================================ */
+
+.container {
+
+    width: min(
+        90%,
+        600px
+    );
+
+    text-align: center;
+
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.header h1 {
+
+    margin: 0;
+
+    font-size: 3rem;
+
+}
+
+
+.header p {
+
+    margin-top: 10px;
+
+    color: #666;
+
+}
+
+
+/* ============================================================
+   LEGEND
+   ============================================================ */
+
+.legend {
+
+    margin-top: 30px;
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+
+}
+
+
+/* ============================================================
+   GAME BOARD
+   ============================================================ */
+
+.board {
+
+    margin: 30px auto;
+
+    display: grid;
+
+    grid-template-columns: repeat(
+        4,
+        1fr
+    );
+
+    gap: 10px;
+
+    width: min(
+        100%,
+        500px
+    );
+
+}
+
+
+/* ============================================================
+   BOARD CELL
+   ============================================================ */
+
+.cell {
+
+    aspect-ratio: 1;
+
+    border: none;
+
+    border-radius: 12px;
+
+    font-size: 2rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+
+}
+
+
+/* ============================================================
+   CELL STATES
+   ============================================================ */
+
+.cell.empty {
+
+    background: white;
+
+    color: #888;
+
+}
+
+
+
+
+/* ============================================================
+   RED HUMAN MOVE
+   ============================================================ */
+
+.cell.red {
+
+    background:
+        #ffdddd;
+
+    color:
+        #d00000;
+
+}
+
+
+/* ============================================================
+   GREEN AI MOVE
+   ============================================================ */
+
+.cell.green {
+
+    background:
+        #ddffdd;
+
+    color:
+        #008000;
+
+}
+
+
+/* ============================================================
+   CELL HOVER
+   ============================================================ */
+
+.cell:hover {
+
+    transform: scale(
+        1.04
+    );
+
+}
+
+
+/* ============================================================
+   FIND MOVE BUTTON
+   ============================================================ */
+
+#findMoveButton {
+
+    width: 100%;
+
+    padding: 16px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    font-size: 1rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    background: #008000;
+
+    color: white;
+
+}
+
+
+#findMoveButton:hover {
+
+    opacity: 0.9;
+
+}
+
+
+/* ============================================================
+   RESULT
+   ============================================================ */
+
+.result {
+
+    margin-top: 25px;
+
+    padding: 20px;
+
+    border-radius: 12px;
+
+    background: white;
+
+}
+
+
+
+/* ============================================================
+   AI MOVE HIGHLIGHT
+   ============================================================ */
+
+   .cell.ai-move {
+
+    box-shadow:
+        0 0 0 4px #008000,
+        0 0 15px #008000;
+
+    transform:
+        scale(1.05);
+
+}
+
+
+.cell {
+
+    font-size:
+        2.2rem;
+
+    font-weight:
+        bold;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+
+}
+
+
+.cell:not(:disabled):hover {
+
+    transform:
+        scale(1.05);
+
+    box-shadow:
+        0 6px 18px rgba(
+            0,
+            0,
+            0,
+            0.18
+        );
+
+}
+
+.cell:not(:disabled):active {
+
+    transform:
+        scale(0.95);
+
+}
+
+.cell.disabled {
+
+    cursor:
+        not-allowed;
+
+    opacity:
+        0.75;
+
+}
+
+
+
+.cell.ai-move {
+
+    box-shadow:
+        0 0 0 4px #008000,
+        0 0 18px rgba(
+            0,
+            128,
+            0,
+            0.6
+        );
+
+    transform:
+        scale(1.05);
+
+}
+
+
+/* ============================================================
+   WINNING CELLS
+   ============================================================ */
+
+   .cell.winning-cell {
+
+    transform:
+        scale(1.08);
+
+    box-shadow:
+        0 0 0 4px #ffd700,
+        0 0 20px #ffd700;
+
+}
+
+/* ============================================================
+   WINNING CELL PULSE ANIMATION
+   ============================================================ */
+
+   @keyframes winningPulse {
+
+    0% {
+
+        transform:
+            scale(1.08);
+
+    }
+
+
+    50% {
+
+        transform:
+            scale(1.15);
+
+    }
+
+
+    100% {
+
+        transform:
+            scale(1.08);
+
+    }
+
+}
+
+
+/* ============================================================
+   APPLY ANIMATION TO WINNING CELLS
+   ============================================================ */
+
+.cell.winning-cell {
+
+    animation:
+        winningPulse
+        0.8s
+        ease-in-out
+        infinite;
+
+}
+
+
+.cell.winning-cell {
+
+    transform:
+        scale(1.08);
+
+    box-shadow:
+        0 0 0 4px #ffd700,
+        0 0 20px #ffd700;
+
+    animation:
+        winningPulse
+        0.8s
+        ease-in-out
+        infinite;
+
+}
+
+
+/* ============================================================
+   GAME RESULT ANIMATION
+   ============================================================ */
+
+   @keyframes resultAppear {
+
+    0% {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(15px);
+
+    }
+
+
+    100% {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+.result.game-ended {
+
+    animation:
+        resultAppear
+        0.5s
+        ease-out;
+
+}
+
+
+/* ============================================================
+   NEW GAME BUTTON
+   ============================================================ */
+
+   #newGameButton {
+
+    margin-top:
+        25px;
+
+    padding:
+        14px 28px;
+
+    border:
+        none;
+
+    border-radius:
+        10px;
+
+    font-size:
+        1rem;
+
+    font-weight:
+        bold;
+
+    letter-spacing:
+        1px;
+
+    color:
+        white;
+
+    background:
+        #008000;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+#newGameButton:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 6px 16px rgba(
+            0,
+            128,
+            0,
+            0.3
+        );
+
+}
+
+
+#newGameButton:active {
+
+    transform:
+        translateY(0);
+
+}
+
+
+
+.container {
+
+    max-width:
+        600px;
+
+    margin:
+        40px auto;
+
+    padding:
+        30px;
+
+    text-align:
+        center;
+
+    border-radius:
+        20px;
+
+    background:
+        white;
+
+    box-shadow:
+        0 10px 35px rgba(
+            0,
+            0,
+            0,
+            0.12
+        );
+
+}
+
+
+
+body {
+
+    margin:
+        0;
+
+    min-height:
+        100vh;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f4fff4,
+            #e6f7e6
+        );
+
+    font-family:
+        Arial,
+        sans-serif;
+
+}
+
+.board {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:
+        12px;
+
+    width:
+        100%;
+
+    max-width:
+        450px;
+
+    height:
+        auto;
+
+    min-height:
+        0;
+
+    margin:
+        30px auto;
+
+}
+
+
+.cell {
+
+    width:
+        100%;
+
+    aspect-ratio:
+        1 / 1;
+
+    box-sizing:
+        border-box;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    border:
+        none;
+
+    border-radius:
+        14px;
+
+    background:
+        #f7f7f7;
+
+    box-shadow:
+        0 3px 8px rgba(
+            0,
+            0,
+            0,
+            0.08
+        );
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ============================================================
+   DARK ALIEN BLUE THEME
+   ============================================================ */
+
+
+   :root {
+
+    --space-black:
+        #050914;
+
+    --space-dark:
+        #091426;
+
+    --space-blue:
+        #0b1f3a;
+
+    --alien-blue:
+        #00d9ff;
+
+    --alien-cyan:
+        #00ffff;
+
+    --alien-glow:
+        rgba(
+            0,
+            217,
+            255,
+            0.55
+        );
+
+    --soft-blue:
+        #8eeaff;
+
+    --human-red:
+        #ff3131;
+
+    --panel:
+        rgba(
+            8,
+            20,
+            40,
+            0.88
+        );
+
+}
+
+
+/* ============================================================
+   PAGE
+   ============================================================ */
+
+body {
+
+    margin:
+        0;
+
+    min-height:
+        100vh;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    color:
+        #eafaff;
+
+    background:
+
+        radial-gradient(
+            circle at top,
+            #102f52,
+            #050914 60%
+        );
+
+}
+
+
+/* ============================================================
+   MAIN GAME CONTAINER
+   ============================================================ */
+
+.container {
+
+    width:
+        min(
+            90%,
+            650px
+        );
+
+    margin:
+        40px auto;
+
+    padding:
+        35px;
+
+    text-align:
+        center;
+
+    border:
+        1px solid rgba(
+            0,
+            217,
+            255,
+            0.25
+        );
+
+    border-radius:
+        24px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(
+                15,
+                35,
+                65,
+                0.95
+            ),
+            rgba(
+                5,
+                10,
+                25,
+                0.95
+            )
+        );
+
+    box-shadow:
+
+        0 0 30px rgba(
+            0,
+            217,
+            255,
+            0.12
+        ),
+
+        0 0 80px rgba(
+            0,
+            90,
+            255,
+            0.10
+        );
+
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.header h1 {
+
+    margin:
+        0;
+
+    font-size:
+        clamp(
+            2.5rem,
+            7vw,
+            4rem
+        );
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        5px;
+
+    color:
+        var(--alien-cyan);
+
+    text-shadow:
+
+        0 0 8px
+        rgba(
+            0,
+            255,
+            255,
+            0.8
+        ),
+
+        0 0 25px
+        rgba(
+            0,
+            217,
+            255,
+            0.6
+        ),
+
+        0 0 55px
+        rgba(
+            0,
+            120,
+            255,
+            0.4
+        );
+
+}
+
+
+.header p {
+
+    margin-top:
+        12px;
+
+    color:
+        #8bb7d8;
+
+    font-size:
+        1.1rem;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+/* ============================================================
+   LEGEND
+   ============================================================ */
+
+.legend {
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    gap:
+        28px;
+
+    margin:
+        35px 0;
+
+    font-size:
+        1.1rem;
+
+    color:
+        #c8eaff;
+
+}
+
+
+.legend span {
+
+    padding:
+        10px 16px;
+
+    border:
+
+        1px solid
+        rgba(
+            0,
+            217,
+            255,
+            0.15
+        );
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(
+            0,
+            30,
+            60,
+            0.45
+        );
+
+}
+
+
+/* ============================================================
+   BOARD
+   ============================================================ */
+
+.board {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:
+        12px;
+
+    width:
+        100%;
+
+    max-width:
+        500px;
+
+    margin:
+        30px auto;
+
+}
+
+
+/* ============================================================
+   BASE CELL
+   ============================================================ */
+
+.cell {
+
+    width:
+        100%;
+
+    aspect-ratio:
+        1 / 1;
+
+    box-sizing:
+        border-box;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    border:
+
+        1px solid
+        rgba(
+            0,
+            217,
+            255,
+            0.12
+        );
+
+    border-radius:
+        16px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            #0c1d34,
+            #07111f
+        );
+
+    box-shadow:
+
+        inset
+        0 0 20px
+        rgba(
+            0,
+            100,
+            180,
+            0.08
+        ),
+
+        0 5px 15px
+        rgba(
+            0,
+            0,
+            0,
+            0.4
+        );
+
+    cursor:
+        pointer;
+
+    transition:
+
+        transform
+        0.2s ease,
+
+        box-shadow
+        0.2s ease,
+
+        border-color
+        0.2s ease;
+
+}
+
+
+.cell:hover {
+
+    transform:
+        translateY(-3px);
+
+    border-color:
+        rgba(
+            0,
+            217,
+            255,
+            0.8
+        );
+
+    box-shadow:
+
+        0 0 18px
+        rgba(
+            0,
+            217,
+            255,
+            0.3
+        ),
+
+        inset
+        0 0 20px
+        rgba(
+            0,
+            217,
+            255,
+            0.08
+        );
+
+}
+
+
+/* ============================================================
+   HUMAN RED
+   ============================================================ */
+
+.cell.red {
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(
+                255,
+                50,
+                50,
+                0.22
+            ),
+            rgba(
+                60,
+                10,
+                20,
+                0.8
+            )
+        );
+
+    color:
+        var(--human-red);
+
+    border-color:
+        rgba(
+            255,
+            49,
+            49,
+            0.45
+        );
+
+    text-shadow:
+
+        0 0 10px
+        rgba(
+            255,
+            49,
+            49,
+            0.8
+        );
+
+}
+
+
+/* ============================================================
+   ALIEN AI CELL
+   ============================================================ */
+
+.cell.green {
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(
+                0,
+                217,
+                255,
+                0.2
+            ),
+            rgba(
+                0,
+                40,
+                70,
+                0.9
+            )
+        );
+
+    color:
+        var(--alien-cyan);
+
+    border:
+
+        2px solid
+        rgba(
+            0,
+            217,
+            255,
+            0.85
+        );
+
+    box-shadow:
+
+        0 0 12px
+        rgba(
+            0,
+            217,
+            255,
+            0.4
+        ),
+
+        inset
+        0 0 25px
+        rgba(
+            0,
+            217,
+            255,
+            0.1
+        );
+
+}
+
+
+/* ============================================================
+   AI MOVE HIGHLIGHT
+   ============================================================ */
+
+.cell.ai-move {
+
+    border:
+
+        3px solid
+        var(--alien-cyan);
+
+    box-shadow:
+
+        0 0 15px
+        var(--alien-cyan),
+
+        0 0 35px
+        rgba(
+            0,
+            217,
+            255,
+            0.6
+        );
+
+    animation:
+        aiMovePulse
+        1.5s
+        ease-in-out
+        infinite;
+
+}
+
+
+@keyframes aiMovePulse {
+
+    0% {
+
+        box-shadow:
+
+            0 0 10px
+            rgba(
+                0,
+                217,
+                255,
+                0.5
+            );
+
+    }
+
+
+    50% {
+
+        box-shadow:
+
+            0 0 30px
+            rgba(
+                0,
+                255,
+                255,
+                0.9
+            ),
+
+            0 0 55px
+            rgba(
+                0,
+                100,
+                255,
+                0.5
+            );
+
+    }
+
+
+    100% {
+
+        box-shadow:
+
+            0 0 10px
+            rgba(
+                0,
+                217,
+                255,
+                0.5
+            );
+
+    }
+
+}
+
+
+/* ============================================================
+   WINNING CELLS
+   ============================================================ */
+
+.cell.winning-cell {
+
+    border:
+
+        3px solid
+        var(--alien-cyan);
+
+    box-shadow:
+
+        0 0 15px
+        var(--alien-cyan),
+
+        0 0 35px
+        var(--alien-blue),
+
+        0 0 70px
+        rgba(
+            0,
+            217,
+            255,
+            0.7
+        );
+
+    animation:
+        winningPulse
+        0.8s
+        ease-in-out
+        infinite;
+
+}
+
+
+/* ============================================================
+   NEW GAME BUTTON
+   ============================================================ */
+
+#newGameButton {
+
+    margin-top:
+        25px;
+
+    padding:
+        15px 32px;
+
+    border:
+
+        1px solid
+        var(--alien-cyan);
+
+    border-radius:
+        12px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #0077aa,
+            #00a8cc
+        );
+
+    color:
+        white;
+
+    font-size:
+        1rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+
+        0 0 15px
+        rgba(
+            0,
+            217,
+            255,
+            0.35
+        );
+
+    transition:
+
+        transform
+        0.2s ease,
+
+        box-shadow
+        0.2s ease,
+
+        background
+        0.2s ease;
+
+}
+
+
+#newGameButton:hover {
+
+    transform:
+        translateY(-3px);
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #0099cc,
+            #00d9ff
+        );
+
+    box-shadow:
+
+        0 0 20px
+        rgba(
+            0,
+            217,
+            255,
+            0.6
+        ),
+
+        0 8px 25px
+        rgba(
+            0,
+            0,
+            0,
+            0.4
+        );
+
+}
+
+
+#newGameButton:active {
+
+    transform:
+        translateY(0);
+
+}
+
+
+/* ============================================================
+   RESULT PANEL
+   ============================================================ */
+
+.result {
+
+    margin-top:
+        30px;
+
+    padding:
+        25px;
+
+    border-radius:
+        18px;
+
+    border:
+
+        1px solid
+        rgba(
+            0,
+            217,
+            255,
+            0.15
+        );
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(
+                12,
+                35,
+                65,
+                0.85
+            ),
+            rgba(
+                5,
+                15,
+                30,
+                0.9
+            )
+        );
+
+    color:
+        #dff8ff;
+
+    box-shadow:
+
+        inset
+        0 0 20px
+        rgba(
+            0,
+            217,
+            255,
+            0.05
+        );
+
+}
+
+
+.result p {
+
+    margin:
+        0;
+
+    font-size:
+        1.1rem;
+
+}
+
+
+/* ============================================================
+   DISABLED CELLS
+   ============================================================ */
+
+.cell.disabled {
+
+    cursor:
+        not-allowed;
+
+    opacity:
+        0.65;
+
+}
+
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+
+@media (
+    max-width:
+    600px
+) {
+
+    body {
+
+        align-items:
+            flex-start;
+
+    }
+
+
+    .container {
+
+        width:
+            calc(
+                100% - 30px
+            );
+
+        margin:
+            15px;
+
+        padding:
+            20px;
+
+    }
+
+
+    .legend {
+
+        gap:
+            10px;
+
+        flex-wrap:
+            wrap;
+
+        font-size:
+            0.9rem;
+
+    }
+
+
+    .board {
+
+        gap:
+            8px;
+
+    }
+
+
+    .cell {
+
+        border-radius:
+            12px;
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   GREEN AI — FINAL ALIEN NEON THEME
+   ADD THIS AT THE END OF style.css
+   ========================================================= */
+
+
+/* =========================================================
+   SPACE BACKGROUND
+   ========================================================= */
+
+   body {
+
+    background:
+        radial-gradient(
+            circle at 15% 45%,
+            rgba(0, 150, 255, 0.14),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 85% 50%,
+            rgba(0, 140, 255, 0.14),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(0, 80, 180, 0.12),
+            transparent 30%
+        ),
+
+        #020611;
+
+}
+
+
+/* =========================================================
+   MAIN SCI-FI CONTAINER
+   ========================================================= */
+
+.container {
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(8, 20, 45, 0.96),
+            rgba(2, 8, 22, 0.98)
+        );
+
+    border:
+
+        1px solid
+        rgba(0, 200, 255, 0.8);
+
+    box-shadow:
+
+        0 0 20px
+        rgba(0, 190, 255, 0.45),
+
+        inset 0 0 40px
+        rgba(0, 120, 255, 0.08);
+
+    border-radius: 30px;
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header h1 {
+
+    color: #54eaff;
+
+    text-shadow:
+
+        0 0 10px
+        rgba(0, 220, 255, 0.9),
+
+        0 0 30px
+        rgba(0, 140, 255, 0.8),
+
+        0 0 60px
+        rgba(0, 100, 255, 0.5);
+
+    letter-spacing: 10px;
+
+    font-weight: 900;
+
+}
+
+
+.header p {
+
+    color: #c9d9ed;
+
+    letter-spacing: 7px;
+
+}
+
+
+/* =========================================================
+   LEGEND
+   ========================================================= */
+
+.legend {
+
+    background:
+
+        linear-gradient(
+            90deg,
+            rgba(5, 15, 40, 0.8),
+            rgba(10, 30, 70, 0.6)
+        );
+
+    border:
+
+        1px solid
+        rgba(0, 150, 255, 0.35);
+
+    box-shadow:
+
+        inset 0 0 15px
+        rgba(0, 120, 255, 0.08);
+
+}
+
+
+.legend span {
+
+    color: #d8e6ff;
+
+}
+
+
+/* =========================================================
+   GAME BOARD CELLS
+   ========================================================= */
+
+.cell {
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(5, 18, 42, 0.98),
+            rgba(2, 8, 20, 0.98)
+        );
+
+    border:
+
+        1px solid
+        rgba(80, 170, 255, 0.65);
+
+    box-shadow:
+
+        inset 0 0 18px
+        rgba(0, 100, 255, 0.08),
+
+        0 0 12px
+        rgba(0, 100, 255, 0.08);
+
+}
+
+
+/* =========================================================
+   EMPTY CELL HOVER
+   ========================================================= */
+
+.cell:not(.red):not(.green):hover {
+
+    border-color: #56eaff;
+
+    box-shadow:
+
+        0 0 15px
+        rgba(0, 220, 255, 0.5),
+
+        inset 0 0 20px
+        rgba(0, 150, 255, 0.15);
+
+}
+
+
+/* =========================================================
+   RED PLAYER
+   ========================================================= */
+
+.cell.red {
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(255, 40, 100, 0.12),
+            rgba(20, 5, 20, 0.95)
+        );
+
+    color: #ff5477;
+
+    text-shadow:
+
+        0 0 10px
+        rgba(255, 50, 100, 0.8),
+
+        0 0 25px
+        rgba(255, 0, 70, 0.7);
+
+}
+
+
+/* =========================================================
+   GREEN AI
+   ========================================================= */
+
+.cell.green {
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(0, 220, 255, 0.16),
+            rgba(0, 10, 30, 0.95)
+        );
+
+    color: #61efff;
+
+    text-shadow:
+
+        0 0 12px
+        rgba(0, 220, 255, 1),
+
+        0 0 30px
+        rgba(0, 150, 255, 0.9);
+
+}
+
+
+/* =========================================================
+   AI LAST MOVE
+   ========================================================= */
+
+.cell.ai-move {
+
+    border-color: #61efff;
+
+    box-shadow:
+
+        0 0 12px
+        rgba(0, 220, 255, 0.8),
+
+        0 0 30px
+        rgba(0, 150, 255, 0.5),
+
+        inset 0 0 20px
+        rgba(0, 200, 255, 0.12);
+
+    transform: scale(1.02);
+
+}
+
+
+/* =========================================================
+   WINNING LINE — ALIEN PINK
+   ========================================================= */
+
+.cell.winning {
+
+    position: relative;
+
+    border:
+
+        2px solid #ff4fd8 !important;
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(255, 30, 180, 0.25),
+            rgba(30, 0, 30, 0.95)
+        ) !important;
+
+    box-shadow:
+
+        0 0 12px
+        #ff4fd8,
+
+        0 0 30px
+        rgba(255, 0, 180, 0.9),
+
+        0 0 60px
+        rgba(255, 0, 200, 0.5),
+
+        inset 0 0 20px
+        rgba(255, 0, 180, 0.25) !important;
+
+    animation:
+
+        winningGlow
+        1.2s
+        infinite
+        alternate;
+
+}
+
+
+@keyframes winningGlow {
+
+    from {
+
+        box-shadow:
+
+            0 0 10px
+            #ff4fd8,
+
+            0 0 25px
+            rgba(255, 0, 180, 0.6);
+
+    }
+
+    to {
+
+        box-shadow:
+
+            0 0 20px
+            #ff4fd8,
+
+            0 0 45px
+            rgba(255, 0, 200, 1),
+
+            0 0 75px
+            rgba(255, 0, 200, 0.6);
+
+    }
+
+}
+
+
+/* =========================================================
+   RESULT PANEL
+   ========================================================= */
+
+.result {
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(15, 5, 30, 0.9),
+            rgba(8, 5, 25, 0.95)
+        );
+
+    border:
+
+        1px solid
+        rgba(255, 70, 190, 0.55);
+
+    box-shadow:
+
+        0 0 20px
+        rgba(255, 0, 170, 0.25),
+
+        inset 0 0 25px
+        rgba(255, 0, 180, 0.08);
+
+    color: #f7d9ff;
+
+}
+
+
+.result p {
+
+    color: inherit;
+
+    letter-spacing: 2px;
+
+}
+
+
+/* =========================================================
+   NEW GAME BUTTON
+   ========================================================= */
+
+#newGameButton,
+button {
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #00cfff,
+            #006cff
+        );
+
+    color: #e9faff;
+
+    border:
+
+        1px solid
+        #4deaff;
+
+    box-shadow:
+
+        0 0 12px
+        rgba(0, 220, 255, 0.7),
+
+        0 0 30px
+        rgba(0, 130, 255, 0.45);
+
+    letter-spacing: 4px;
+
+    text-transform: uppercase;
+
+}
+
+
+#newGameButton:hover,
+button:hover {
+
+    transform: scale(1.04);
+
+    box-shadow:
+
+        0 0 20px
+        rgba(0, 240, 255, 1),
+
+        0 0 50px
+        rgba(0, 140, 255, 0.8);
+
+}
+
+
+/* =========================================================
+   DISABLED BOARD
+   ========================================================= */
+
+.cell.disabled {
+
+    opacity: 0.7;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =========================================================
+   STATUS TEXT
+   ========================================================= */
+
+#result {
+
+    color: #dbeeff;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
