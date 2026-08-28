@@ -214,6 +214,7 @@ def solve_board(
 # BEST MOVE ENDPOINT
 # ============================================================
 
+'''
 @app.post(
     "/best-move",
     response_class=PlainTextResponse
@@ -512,6 +513,47 @@ async def best_move(request: Request):
 
     return str(
         best_move
+    )
+'''
+
+@app.post(
+    "/best-move",
+    response_class=PlainTextResponse
+)
+async def best_move(
+    request: Request
+):
+
+
+    # ========================================================
+    # READ RAW REQUEST BODY
+    # ========================================================
+
+    board_state = await request.body()
+
+    board_string = (
+        board_state
+        .decode()
+        .strip()
+    )
+
+
+    # ========================================================
+    # USE SHARED LOGIC
+    # ========================================================
+
+    result, status_code = solve_board(
+        board_string
+    )
+
+
+    # ========================================================
+    # RETURN RESPONSE
+    # ========================================================
+
+    return PlainTextResponse(
+        result,
+        status_code=status_code
     )
 
 @app.get(
