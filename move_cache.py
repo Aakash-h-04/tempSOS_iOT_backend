@@ -71,8 +71,26 @@ def load_move_cache():
 
 def save_move_cache():
 
+    # --------------------------------------------------------
+    # VERCEL FILESYSTEM IS READ-ONLY
+    #
+    # The cache can still work in memory,
+    # but cannot be saved permanently to move_cache.json.
+    # --------------------------------------------------------
+
+    if os.environ.get("VERCEL") == "1":
+
+        return
+
+
+    # --------------------------------------------------------
+    # LOCAL DEVELOPMENT
+    #
+    # Save cache normally.
+    # --------------------------------------------------------
+
     with open(
-        CACHE_FILE,
+        "move_cache.json",
         "w"
     ) as file:
 
@@ -80,8 +98,6 @@ def save_move_cache():
             move_cache,
             file
         )
-
-
 # ============================================================
 # GET CACHED MOVE
 # ============================================================
