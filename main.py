@@ -84,6 +84,132 @@ def health():
     )
 
 
+
+
+def solve_board(
+    board_string: str
+):
+
+    board_string = board_string.strip()
+
+
+    # ========================================================
+    # VALIDATE LENGTH
+    # ========================================================
+
+    if len(board_string) != 16:
+
+        return (
+            "INVALID BOARD: Board must contain exactly 16 cells",
+            400
+        )
+
+
+    # ========================================================
+    # VALIDATE CELL VALUES
+    # ========================================================
+
+    for cell in board_string:
+
+        if cell not in "012":
+
+            return (
+                "INVALID BOARD: Cells must contain only 0, 1 or 2",
+                400
+            )
+
+
+    # ========================================================
+    # CONVERT STRING → BOARD
+    # ========================================================
+
+    board = [
+        int(cell)
+        for cell in board_string
+    ]
+
+
+    # ========================================================
+    # CHECK GAME OVER
+    # ========================================================
+
+    if check_win(board, 1):
+
+        return (
+            "GAME OVER: RED has already won",
+            400
+        )
+
+
+    if check_win(board, 2):
+
+        return (
+            "GAME OVER: GREEN has already won",
+            400
+        )
+
+
+    if is_board_full(board):
+
+        return (
+            "GAME OVER: DRAW",
+            400
+        )
+
+
+    # ========================================================
+    # VALIDATE GREEN'S TURN
+    # ========================================================
+
+    red_count = board.count(1)
+
+    green_count = board.count(2)
+
+
+    if red_count != green_count + 1:
+
+        return (
+            "INVALID BOARD: GREEN is not the player to move",
+            400
+        )
+
+
+    # ========================================================
+    # CHECK CACHE
+    # ========================================================
+
+    cached_move = get_cached_move(
+        board_string
+    )
+
+
+    if cached_move is not None:
+
+        return (
+            str(cached_move),
+            200
+        )
+
+
+    # ========================================================
+    # CACHE MISS → AI
+    # ========================================================
+
+    best_move = find_best_move(
+        board
+    )
+
+
+    store_move(
+        board_string,
+        best_move
+    )
+
+
+    return (
+        str(best_move),
+        200
+    )
 # ============================================================
 # BEST MOVE ENDPOINT
 # ============================================================
